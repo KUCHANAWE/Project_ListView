@@ -23,10 +23,10 @@ class MainActivity : AppCompatActivity() {
 
         var data = mutableListOf<String>()
 
-        data.addAll(listOf("1","2","3","4","5"))
+        data.addAll(listOf("1", "2", "3", "4", "5"))
 
         val lvAdapter = ArrayAdapter(
-            this,android.R.layout.simple_list_item_1,
+            this, android.R.layout.simple_list_item_1,
             data
         )
 
@@ -34,21 +34,37 @@ class MainActivity : AppCompatActivity() {
         _lv1.adapter = lvAdapter
 
         val _btnTambah = findViewById<Button>(R.id.btnTambah)
-        _btnTambah.setOnClickListener{
-            var dtAkhir = Integer.parseInt(data.get(data.size-1))+1
+        _btnTambah.setOnClickListener {
+            var dtAkhir = Integer.parseInt(data.get(data.size - 1)) + 1
             data.add(dtAkhir.toString())
             lvAdapter.notifyDataSetChanged()
         }
 
-        _lv1.setOnItemClickListener {parent,view, posisition, id ->
-            Toast.makeText(this,"${data[posisition]}",
-                Toast.LENGTH_LONG).show()
+        _lv1.setOnItemClickListener { parent, view, posisition, id ->
+            Toast.makeText(
+                this, "${data[posisition]}",
+                Toast.LENGTH_LONG
+            ).show()
         }
 
         val _btnHapus = findViewById<Button>(R.id.btnHapus)
-        _btnHapus.setOnClickListener{
+        _btnHapus.setOnClickListener {
             data.removeFirst()
             lvAdapter.notifyDataSetChanged()
         }
+
+        val _sv1 = findViewById<android.widget.SearchView>(R.id.sv1)
+        _sv1.setOnQueryTextListener(object : android.widget.SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                lvAdapter.getFilter().filter(query)
+                return false
+            }
+
+
+            override fun onQueryTextChange(newText: String): Boolean {
+                lvAdapter.getFilter().filter(newText)
+                return false
+            }
+        })
     }
 }
